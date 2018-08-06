@@ -1,6 +1,6 @@
-# Phaser 3 Webpack Project Template
+# For Honor De-make
 
-A Phaser 3 Project Template
+A 2D Prototype of the For Honor Combat System using Phaser 3
 
 ### Requirements
 
