@@ -9,6 +9,9 @@ let config = {
     physics: {
       system: 'arcade'
     },
+    input: {
+      gamepad: true
+    },
     scene: [
       states.Boot,
       states.Load,
