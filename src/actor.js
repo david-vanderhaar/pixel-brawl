@@ -1,5 +1,7 @@
 import * as actionFSM from './state-machines/actionFSM';
 import * as aimFSM from './state-machines/aimFSM';
+import * as lockFSM from './state-machines/lockFSM';
+import * as actorInput from './actor/input';
 
 export function createActor(game, x, y) {
   let new_actor = game.add.group();
@@ -7,28 +9,13 @@ export function createActor(game, x, y) {
   new_actor.y = y;
   new_actor.states = {
     actions: new actionFSM.FSM,
-    aim: new aimFSM.FSM
+    aim: new aimFSM.FSM,
+    lock: new lockFSM.FSM,
   }
 
   // controls
-  console.log(game.input)
-  new_actor.input = {
-    keyboard: {
-      left: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-      right: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-      aim_up: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-      aim_down: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
-      aim_front: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-    },
-    controller: {
-      pad: null,
-      left: null,
-      right: null,
-      aim_up: null,
-      aim_down: null,
-      aim_front: null,
-    }
-  }
+  new_actor.input = actorInput.createInput(game);
+
   //end controls
   // ui
   new_actor.hit_box = new_actor.create(x, y, 'body')
@@ -46,20 +33,22 @@ export function createActor(game, x, y) {
   ];
   new_actor.ui_directions.forEach((element) => {
     element.setScale(.6);
-    element.alpha = .5;
+    element.alpha = 0;
   });
+  new_actor.ui_tweens = [];
   // end ui
   // update
   new_actor.update = (game) => {
-    try {
-      new_actor.input.pad = game.input.gamepad.getPad(0);
-      new_actor.input.controller.left = new_actor.input.pad.axes[0].getValue();
-      new_actor.input.controller.right = new_actor.input.pad.axes[0].getValue();
-      new_actor.input.controller.aim_up = new_actor.input.pad.axes[4].getValue();
-      new_actor.input.controller.aim_down = new_actor.input.pad.axes[4].getValue();
-      new_actor.input.controller.aim_front = new_actor.input.pad.axes[3].getValue();
-    } catch(error) {
-      // console.error('No gamepad detected');
+    new_actor.input.update(new_actor);
+
+    switch (new_actor.states.lock.state) {
+      case 'locked':
+        lockFSM.locked(new_actor);
+        break;
+      case 'unlocked':
+        lockFSM.unlocked(new_actor);
+        if (!new_actor.states.aim.is('up')) { new_actor.states.aim.aimUp(); }
+        break;
     }
 
     switch (new_actor.states.actions.state) {
@@ -70,17 +59,19 @@ export function createActor(game, x, y) {
         actionFSM.moving(new_actor);
         break;
     }
-
-    switch (new_actor.states.aim.state) {
-      case 'up':
-        aimFSM.aimingUp(game, 'up', new_actor);
-        break;
-      case 'down':
-        aimFSM.aimingDown(game, 'down', new_actor);
-        break;
-      case 'front':
-        aimFSM.aimingFront(game, 'front', new_actor);
-        break;
+    
+    if (new_actor.states.lock.is('locked')) {
+      switch (new_actor.states.aim.state) {
+        case 'up':
+          aimFSM.aimingUp(game, 'up', new_actor);
+          break;
+        case 'down':
+          aimFSM.aimingDown(game, 'down', new_actor);
+          break;
+        case 'front':
+          aimFSM.aimingFront(game, 'front', new_actor);
+          break;
+      }
     }
 
   }
