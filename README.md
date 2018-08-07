@@ -1,6 +1,6 @@
-# For Honor De-make
+# Pixel Brawl
 
-A 2D Prototype of the For Honor Combat System using Phaser 3
+A 2D Prototype Brawler, inspired by For Honor's combat.
 
 ### Requirements
 
