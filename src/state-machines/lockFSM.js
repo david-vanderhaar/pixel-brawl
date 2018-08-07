@@ -23,23 +23,23 @@ export class FSM extends StateMachine {
 export function locked(actor) {
   if (!actor.input.keyboard.lock.isDown && actor.input.controller.lock <= 0) {
     actor.states.lock.unlock(actor);
-    actor.ui_tweens.forEach((tween) => {
+    actor.ui.tweens.forEach((tween) => {
       tween.stop();
     });
-    actor.ui_tweens = [];
-    actor.ui_directions.forEach((element) => {
-      element.setScale(.6);
-      element.alpha = 0;
-    });
+    actor.ui.tweens = [];
+    for (let element in actor.ui.directions) {
+      actor.ui.directions[element].setScale(actor.ui.constants.scaleDefault);
+      actor.ui.directions[element].alpha = 0;
+    };
   }
 }
 
 export function unlocked(actor) {
   if (actor.input.keyboard.lock.isDown || actor.input.controller.lock > 0) {
     actor.states.lock.lock(actor);
-    actor.ui_directions.forEach((element) => {
-      element.setScale(.6);
-      element.alpha = .5;
-    });
+    for (let element in actor.ui.directions) {
+      actor.ui.directions[element].setScale(actor.ui.constants.scaleDefault);
+      actor.ui.directions[element].alpha = actor.ui.constants.alphaDefault;
+    };
   }
 }

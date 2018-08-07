@@ -2,6 +2,7 @@ import * as actionFSM from './state-machines/actionFSM';
 import * as aimFSM from './state-machines/aimFSM';
 import * as lockFSM from './state-machines/lockFSM';
 import * as actorInput from './actor/input';
+import * as actorUI from './actor/ui';
 
 export function createActor(game, x, y) {
   let new_actor = game.add.group();
@@ -15,27 +16,10 @@ export function createActor(game, x, y) {
 
   // controls
   new_actor.input = actorInput.createInput(game);
-
   //end controls
   // ui
-  new_actor.hit_box = new_actor.create(x, y, 'body')
-  new_actor.hit_box.name = 'hit_box';
-  new_actor.aim_up = new_actor.create(x, y - 42, 'direction')
-  new_actor.aim_up.name = 'aim_up';
-  new_actor.aim_down = new_actor.create(x, y + 42, 'direction')
-  new_actor.aim_down.name = 'aim_down';
-  new_actor.aim_front = new_actor.create(x + 42, y, 'direction')
-  new_actor.aim_front.name = 'aim_front';
-  new_actor.ui_directions = [
-    new_actor.aim_up,
-    new_actor.aim_down,
-    new_actor.aim_front,
-  ];
-  new_actor.ui_directions.forEach((element) => {
-    element.setScale(.6);
-    element.alpha = 0;
-  });
-  new_actor.ui_tweens = [];
+  new_actor.ui = actorUI.createUI(new_actor, new_actor.x, new_actor.y);
+  new_actor.ui.init(new_actor);
   // end ui
   // update
   new_actor.update = (game) => {

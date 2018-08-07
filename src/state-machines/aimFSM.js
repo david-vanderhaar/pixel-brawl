@@ -18,71 +18,41 @@ export class FSM extends StateMachine {
   }
 }
 
-function updateAimUI(game, dir, actor) {
-  let dirs = ['up', 'down', 'front'];
-  actor.ui_tweens.push(
-    game.tweens.add({
-      targets: actor['aim_' + dir],
-      scaleX: .8,
-      scaleY: .8,
-      alpha: 1,
-      duration: 1000,
-      ease: 'Elastic',
-      easeParams: [ 1.5, 0.5 ],
-      delay: 0
-    })
-  );
-
-  dirs.filter((d) => d != dir).forEach((d) => {
-    actor.ui_tweens.push(
-      game.tweens.add({
-        targets: actor['aim_' + d],
-        scaleX: .6,
-        scaleY: .6,
-        alpha: .5,
-        duration: 1000,
-        ease: 'Elastic',
-        easeParams: [ 1.5, 0.5 ],
-        delay: 0,
-      })
-    );
-  });
-}
-
 export function aimingUp(game, dir, actor) {
   if (actor.input.keyboard.aim_down.isDown || actor.input.controller.aim_down > 0.4) {
-    updateAimUI(game, 'down', actor);
+    actor.ui.update(game, 'down', actor);
     actor.states.aim.aimDown();
   } else if (actor.input.keyboard.aim_front.isDown || actor.input.controller.aim_front > 0) {
-    updateAimUI(game, 'front', actor);
+    actor.ui.update(game, 'front', actor);
     actor.states.aim.aimFront();
   }
 
-  if (actor.states.aim.is('up') && actor.aim_up.scaleX < .8) {
-    updateAimUI(game, 'up', actor);
+  if (actor.states.aim.is('up') && actor.ui.directions.aim_up.scaleX < actor.ui.constants.scaleActive) {
+    actor.ui.update(game, 'up', actor);
   }
 }
 export function aimingDown(game, dir, actor) {
   if (actor.input.keyboard.aim_up.isDown || actor.input.controller.aim_up < -0.4) {
-    updateAimUI(game, 'up', actor);
+    console.log(actor.input.keyboard.aim_up)
+    actor.ui.update(game, 'up', actor);
     actor.states.aim.aimUp();
   } else if (actor.input.keyboard.aim_front.isDown || actor.input.controller.aim_front > 0) {
-    updateAimUI(game, 'front', actor);
+    actor.ui.update(game, 'front', actor);
     actor.states.aim.aimFront();
   }
-  if (actor.states.aim.is('down') && actor.aim_up.scaleX < .8) {
-    updateAimUI(game, 'down', actor);
+  if (actor.states.aim.is('down') && actor.ui.directions.aim_up.scaleX < actor.ui.constants.scaleActive) {
+    actor.ui.update(game, 'down', actor);
   }
 }
 export function aimingFront(game, dir, actor) {
   if (actor.input.keyboard.aim_up.isDown || actor.input.controller.aim_up < -0.4) {
-    updateAimUI(game, 'up', actor);
+    actor.ui.update(game, 'up', actor);
     actor.states.aim.aimUp();
   } else if (actor.input.keyboard.aim_down.isDown || actor.input.controller.aim_down > 0.4) {
-    updateAimUI(game, 'down', actor);
+    actor.ui.update(game, 'down', actor);
     actor.states.aim.aimDown();
   }
-  if (actor.states.aim.is('front') && actor.aim_up.scaleX < .8) {
-    updateAimUI(game, 'front', actor);
+  if (actor.states.aim.is('front') && actor.ui.directions.aim_up.scaleX < actor.ui.constants.scaleActive) {
+    actor.ui.update(game, 'front', actor);
   }
 }
