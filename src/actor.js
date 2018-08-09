@@ -5,9 +5,10 @@ import * as actorInput from './actor/input';
 import * as actorUI from './actor/ui';
 
 export function createActor(game, x, y) {
-  let new_actor = game.add.group();
+  let new_actor = game.physics.add.group();
   new_actor.x = x;
   new_actor.y = y;
+  new_actor.facingRight = true;
   new_actor.states = {
     actions: new actionFSM.FSM,
     aim: new aimFSM.FSM,
@@ -18,12 +19,13 @@ export function createActor(game, x, y) {
   new_actor.input = actorInput.createInput(game);
   //end controls
   // ui
-  new_actor.ui = actorUI.createUI(new_actor, new_actor.x, new_actor.y);
+  new_actor.ui = actorUI.createUI(game, new_actor, new_actor.x, new_actor.y);
   new_actor.ui.init(new_actor);
   // end ui
   // update
   new_actor.update = (game) => {
     new_actor.input.update(new_actor);
+    new_actor.ui.update(new_actor);
 
     switch (new_actor.states.lock.state) {
       case 'locked':

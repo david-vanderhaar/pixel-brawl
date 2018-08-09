@@ -19,8 +19,10 @@ export class FSM extends StateMachine {
 export function moving(actor) {
   if (actor.input.keyboard.left.isDown || actor.input.controller.left < 0) {
     Phaser.Actions.IncX(actor.getChildren(), -4);
+    if (actor.facingRight) { actor.facingRight = false; actor.ui.directions.aim_front.x = actor.x - 42; }
   }
   else if (actor.input.keyboard.right.isDown || actor.input.controller.right > 0) {
+    if (!actor.facingRight) { actor.facingRight = true; actor.ui.directions.aim_front.x = actor.x + 42; }
     Phaser.Actions.IncX(actor.getChildren(), 4);
   } else {
     actor.states.actions.stand();
