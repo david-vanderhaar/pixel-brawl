@@ -38,7 +38,7 @@ export function createAnimations(game) {
         {
             key: 'light',
             frames: game.anims.generateFrameNumbers('sword_guy', { start: 32, end: 35, first: 32 }),
-            repeat: -1,
+            // repeat: 1,
             frameRate: 12
         },
         {

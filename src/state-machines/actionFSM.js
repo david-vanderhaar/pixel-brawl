@@ -18,12 +18,12 @@ export class FSM extends StateMachine {
 
 export function moving(actor) {
   if (actor.input.keyboard.left.isDown || actor.input.controller.left < 0) {
-    Phaser.Actions.IncX(actor.getChildren(), -4);
-    if (actor.facingRight) { actor.facingRight = false; actor.ui.directions.aim_front.x = actor.x - 42; }
+    Phaser.Actions.IncX(actor.getChildren(), -2);
+    if (actor.facingRight) { actor.facingRight = false; actor.ui.flip(actor);}
   }
   else if (actor.input.keyboard.right.isDown || actor.input.controller.right > 0) {
-    if (!actor.facingRight) { actor.facingRight = true; actor.ui.directions.aim_front.x = actor.x + 42; }
-    Phaser.Actions.IncX(actor.getChildren(), 4);
+    if (!actor.facingRight) { actor.facingRight = true; actor.ui.flip(actor);}
+    Phaser.Actions.IncX(actor.getChildren(), 2);
   } else {
     actor.states.actions.stand();
   }
@@ -35,5 +35,9 @@ export function standing(actor) {
   }
   else if (actor.input.keyboard.right.isDown || actor.input.controller.right > 0) {
     actor.states.actions.move();
+  }
+  
+  if (actor.input.keyboard.light.isDown) {
+    actor.ui.hit_box.anims.play('light');
   }
 }

@@ -25,7 +25,7 @@ export function createActor(game, x, y) {
   // update
   new_actor.update = (game) => {
     new_actor.input.update(new_actor);
-    new_actor.ui.update(new_actor);
+    // new_actor.ui.update(new_actor);
 
     switch (new_actor.states.lock.state) {
       case 'locked':
@@ -51,11 +51,11 @@ export function createActor(game, x, y) {
         case 'up':
           aimFSM.aimingUp(game, 'up', new_actor);
           break;
-        case 'down':
-          aimFSM.aimingDown(game, 'down', new_actor);
+        case 'left':
+          aimFSM.aimingLeft(game, 'left', new_actor);
           break;
-        case 'front':
-          aimFSM.aimingFront(game, 'front', new_actor);
+        case 'right':
+          aimFSM.aimingRight(game, 'right', new_actor);
           break;
       }
     }

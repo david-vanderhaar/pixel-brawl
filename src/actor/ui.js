@@ -10,31 +10,52 @@ export function createUI(game, actor, x, y) {
         },
         hit_box: actor.create(x, y, 'body'),
         directions: {
-            aim_up: actor.create(x, y - 42, 'direction'),
-            aim_down: actor.create(x, y + 42, 'direction'),
-            aim_front: actor.create(x + 42, y, 'direction'),
+            aim_up: actor.create(x, y - 16, 'direction'),
+            aim_left: actor.create(x - 42, y + 54, 'direction'),
+            aim_right: actor.create(x + 42, y + 54, 'direction'),
         },
         animations: Animations.createAnimations(game),
         tweens: [],
         init: (actor) => {
-            actor.getChildren().forEach(element => {
-                element.scaleX = 2;
-                element.scaleY = 2;
-              });
-            actor.ui.hit_box.setOrigin(.45, .65);
+            console.log(actor.ui.hit_box)
             Animations.initAnimations(game, actor.ui.animations);
             actor.ui.hit_box.anims.play('idle');
+            actor.ui.hit_box.body.transform.displayOriginX = 16;
+            actor.ui.hit_box.body.transform.displayOriginY = 8;
+            actor.getChildren().forEach(element => {
+                element.setDisplaySize(128, 128)
+            });
+            for (let element in actor.ui.directions) {
+                actor.ui.directions[element].setScale(actor.ui.constants.scale);
+                actor.ui.directions[element].alpha = 0;
+            };
+
+            actor.ui.hit_box.on('animationcomplete', () => {actor.ui.hit_box.anims.play('idle')}, game)
+        },
+        update: (actor) => {
+            // actor.x = actor.ui.hit_box.x;
+            // actor.y = actor.ui.hit_box.y;
+        },
+        flip: (actor) => {
+            if (actor.facingRight) {
+                actor.ui.hit_box.body.transform.displayOriginX = 16;
+                actor.getChildren().forEach(element => {
+                    element.setDisplaySize(128, 128)
+                });
+            } else {
+                actor.ui.hit_box.body.transform.displayOriginX = -16;
+                actor.getChildren().forEach(element => {
+                    element.setDisplaySize(-128, 128)
+                });
+            }
+
             for (let element in actor.ui.directions) {
                 actor.ui.directions[element].setScale(actor.ui.constants.scale);
                 actor.ui.directions[element].alpha = 0;
             };
         },
-        update: (actor) => {
-            actor.x = actor.ui.hit_box.x;
-            actor.y = actor.ui.hit_box.y;
-        },
         aimUISwitch: (game, dir, actor) => {
-            let dirs = ['up', 'down', 'front'];
+            let dirs = ['up', 'left', 'right'];
             actor.ui.tweens.push(
               game.tweens.add({
                 targets: actor.ui.directions['aim_' + dir],
