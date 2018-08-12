@@ -8,20 +8,22 @@ export function createActor(game, x, y) {
   let new_actor = game.physics.add.group();
   new_actor.x = x;
   new_actor.y = y;
+  new_actor.speed = 4;
   new_actor.facingRight = true;
+
+  // controls
+  new_actor.input = actorInput.createInput(game);
+  // ui
+  new_actor.ui = actorUI.createUI(game, new_actor, new_actor.x, new_actor.y);
+  new_actor.ui.init(new_actor);
+  // state machines
+  console.log(new_actor)
   new_actor.states = {
-    actions: new actionFSM.FSM,
+    actions: new actionFSM.FSM({actor: new_actor}),
     aim: new aimFSM.FSM,
     lock: new lockFSM.FSM,
   }
 
-  // controls
-  new_actor.input = actorInput.createInput(game);
-  //end controls
-  // ui
-  new_actor.ui = actorUI.createUI(game, new_actor, new_actor.x, new_actor.y);
-  new_actor.ui.init(new_actor);
-  // end ui
   // update
   new_actor.update = (game) => {
     new_actor.input.update(new_actor);
@@ -37,12 +39,19 @@ export function createActor(game, x, y) {
         break;
     }
 
-    switch (new_actor.states.actions.state) {
+    let currentState = new_actor.states.actions.state;
+    switch (currentState) {
       case 'standing':
-        actionFSM.standing(new_actor);
+        actionFSM[currentState](new_actor);
         break;
       case 'moving':
-        actionFSM.moving(new_actor);
+        actionFSM[currentState](new_actor);
+        break;
+      case 'light_attacking':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'heavy_attacking':
+        actionFSM[currentState](new_actor);
         break;
     }
     

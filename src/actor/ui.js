@@ -8,7 +8,7 @@ export function createUI(game, actor, x, y) {
             alphaDefault: .5,
             alphaActive: 1,
         },
-        hit_box: actor.create(x, y, 'body'),
+        body: actor.create(x, y, 'body'),
         directions: {
             aim_up: actor.create(x, y - 16, 'direction'),
             aim_left: actor.create(x - 42, y + 54, 'direction'),
@@ -17,11 +17,11 @@ export function createUI(game, actor, x, y) {
         animations: Animations.createAnimations(game),
         tweens: [],
         init: (actor) => {
-            console.log(actor.ui.hit_box)
+            console.log(actor.ui.body)
             Animations.initAnimations(game, actor.ui.animations);
-            actor.ui.hit_box.anims.play('idle');
-            actor.ui.hit_box.body.transform.displayOriginX = 16;
-            actor.ui.hit_box.body.transform.displayOriginY = 8;
+            actor.ui.body.anims.play('idle');
+            actor.ui.body.body.transform.displayOriginX = 16;
+            actor.ui.body.body.transform.displayOriginY = 8;
             actor.getChildren().forEach(element => {
                 element.setDisplaySize(128, 128)
             });
@@ -30,20 +30,19 @@ export function createUI(game, actor, x, y) {
                 actor.ui.directions[element].alpha = 0;
             };
 
-            actor.ui.hit_box.on('animationcomplete', () => {actor.ui.hit_box.anims.play('idle')}, game)
         },
         update: (actor) => {
-            // actor.x = actor.ui.hit_box.x;
-            // actor.y = actor.ui.hit_box.y;
+            // actor.x = actor.ui.body.x;
+            // actor.y = actor.ui.body.y;
         },
         flip: (actor) => {
             if (actor.facingRight) {
-                actor.ui.hit_box.body.transform.displayOriginX = 16;
+                actor.ui.body.body.transform.displayOriginX = 16;
                 actor.getChildren().forEach(element => {
                     element.setDisplaySize(128, 128)
                 });
             } else {
-                actor.ui.hit_box.body.transform.displayOriginX = -16;
+                actor.ui.body.body.transform.displayOriginX = -16;
                 actor.getChildren().forEach(element => {
                     element.setDisplaySize(-128, 128)
                 });
