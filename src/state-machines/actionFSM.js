@@ -73,13 +73,31 @@ export function standing(actor) {
 }
 
 export function light_attacking(actor) {
-  console.log(actor.ui.body.anims)
-  if (!actor.ui.body.anims.isPlaying) {
-    actor.states.actions.stand();
-  }
+  let activeFrames = [4, 5, 6, 7]
+  updateAttackState(actor, activeFrames);
 }
 
 export function heavy_attacking(actor) {
+  let activeFrames = [3, 4]
+  updateAttackState(actor, activeFrames);
+}
+
+let updateAttackState = (actor, activeFrames) => {
+  let currentFrame = actor.ui.body.anims.currentFrame.index;
+  if (activeFrames.indexOf(currentFrame) !== -1) {
+    if (actor.ui.hit_box.box == null) {
+      actor.ui.hit_box.create(actor);
+    }
+    actor.ui.hit_box.update(actor);
+  }
+
+  if (currentFrame >= activeFrames[activeFrames.length - 1]) {
+    if (actor.ui.hit_box.box !== null) {
+      actor.ui.hit_box.box.destroy();
+      actor.ui.hit_box.box = null;
+    }
+  }
+
   if (!actor.ui.body.anims.isPlaying) {
     actor.states.actions.stand();
   }

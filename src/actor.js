@@ -9,6 +9,7 @@ export function createActor(game, x, y) {
   new_actor.x = x;
   new_actor.y = y;
   new_actor.speed = 4;
+  new_actor.reach = 2;
   new_actor.facingRight = true;
 
   // controls
@@ -17,13 +18,11 @@ export function createActor(game, x, y) {
   new_actor.ui = actorUI.createUI(game, new_actor, new_actor.x, new_actor.y);
   new_actor.ui.init(new_actor);
   // state machines
-  console.log(new_actor)
   new_actor.states = {
     actions: new actionFSM.FSM({actor: new_actor}),
     aim: new aimFSM.FSM,
     lock: new lockFSM.FSM,
   }
-
   // update
   new_actor.update = (game) => {
     new_actor.input.update(new_actor);

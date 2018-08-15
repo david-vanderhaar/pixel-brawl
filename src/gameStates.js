@@ -44,6 +44,7 @@ export class Load extends Phaser.Scene {
 }
 
 let actor;
+let dummy;
 
 export class Play extends Phaser.Scene {
   constructor () {
@@ -53,7 +54,8 @@ export class Play extends Phaser.Scene {
     this.add.text(80, 20, 'Play')
 
     actor = createActor(this, 200, 200);
-
+    this.dummy = this.physics.add.sprite(600, 200, 'body')
+    
   } //end create
   
   update() {

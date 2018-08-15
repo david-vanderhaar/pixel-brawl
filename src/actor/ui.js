@@ -8,6 +8,21 @@ export function createUI(game, actor, x, y) {
             alphaDefault: .5,
             alphaActive: 1,
         },
+        hit_box: {
+            box: null,
+            create: (actor) => {
+                actor.ui.hit_box.box = game.physics.add.sprite('body');
+                actor.ui.hit_box.box.scaleX = actor.reach;
+
+                // add checkHit function
+                game.physics.add.overlap(game.dummy, actor.ui.hit_box.box, () => {console.log('over')});
+
+            },
+            update: (actor) => {
+                actor.ui.hit_box.box.x = actor.ui.body.body.x + (64 * actor.facingRight);
+                actor.ui.hit_box.box.y = actor.ui.body.body.y + 32;
+            },
+        },
         body: actor.create(x, y, 'body'),
         directions: {
             aim_up: actor.create(x, y - 16, 'direction'),
@@ -17,7 +32,6 @@ export function createUI(game, actor, x, y) {
         animations: Animations.createAnimations(game),
         tweens: [],
         init: (actor) => {
-            console.log(actor.ui.body)
             Animations.initAnimations(game, actor.ui.animations);
             actor.ui.body.anims.play('idle');
             actor.ui.body.body.transform.displayOriginX = 16;
@@ -29,11 +43,10 @@ export function createUI(game, actor, x, y) {
                 actor.ui.directions[element].setScale(actor.ui.constants.scale);
                 actor.ui.directions[element].alpha = 0;
             };
-
+            
         },
         update: (actor) => {
-            // actor.x = actor.ui.body.x;
-            // actor.y = actor.ui.body.y;
+
         },
         flip: (actor) => {
             if (actor.facingRight) {
