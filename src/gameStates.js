@@ -52,13 +52,35 @@ export class Play extends Phaser.Scene {
   }
   create() {
     this.add.text(80, 20, 'Play')
+    this.add.text(80, 50, 'Press a button on the Gamepad to use', { font: '16px Courier', fill: '#00ff00' });
+    this.actors = [];
+    this.maxPlayers = 2;
 
-    actor = createActor(this, 200, 200);
+    addPad(this);
+
     this.dummy = this.physics.add.sprite(600, 200, 'body')
     
   } //end create
   
   update() {
-    actor.update(this);
+    this.actors.forEach((actor) => {
+      actor.update(this)
+    })
   }
+}
+
+let addPad = (game) => {
+  game.input.gamepad.once('down', function (pad, button, index) {
+    if (!pad.hasOwnProperty('isActive')) {
+      pad['isActive'] = true;
+      let actor = createActor(game, 200, 200);
+      actor.input.pad = pad
+      game.actors.push(actor)
+    } else {
+      console.log('taken')
+    }
+    if (game.actors.length < game.maxPlayers) {
+      addPad(game);
+    }
+  }, game);
 }

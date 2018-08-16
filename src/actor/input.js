@@ -19,19 +19,21 @@ export function createInput(game) {
       aim_left: null,
       aim_right: null,
       lock: null,
+      light: null,
+      heavy: null,
     },
     update: (actor) => {
-      if (actor.input.pad === null) {
+      if (actor.input.pad !== null) {
         try {
-          actor.input.pad = game.input.gamepad.getPad(0);
+          // actor.input.pad = game.input.gamepad.getPad(0);
           actor.input.controller.left = actor.input.pad.axes[0].getValue();
           actor.input.controller.right = actor.input.pad.axes[0].getValue();
           actor.input.controller.aim_up = actor.input.pad.axes[4].getValue();
           actor.input.controller.aim_left = actor.input.pad.axes[3].getValue();
           actor.input.controller.aim_right = actor.input.pad.axes[3].getValue();
           actor.input.controller.lock = actor.input.pad.axes[2].getValue();
-          actor.input.controller.light = 0;
-          actor.input.controller.heavy = 0;
+          actor.input.controller.light = actor.input.pad.R1;
+          actor.input.controller.heavy = actor.input.pad.axes[5].getValue();
         } catch(error) {
           // console.error('No gamepad detected');
         }

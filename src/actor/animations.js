@@ -31,12 +31,6 @@ export function createAnimations(game) {
         },
         {
             key: 'heavy',
-            frames: game.anims.generateFrameNumbers('sword_guy', { start: 20, end: 23, first: 20 }),
-            // repeat: -1,
-            frameRate: 12
-        },
-        {
-            key: 'light',
             // frames: game.anims.generateFrameNumbers('sword_guy', { start: 32, end: 35, first: 32 }),
             frames: [
                 {key: 'sword_guy', frame: 32}, 
@@ -47,7 +41,13 @@ export function createAnimations(game) {
                 {key: 'sword_guy', frame: 34}, 
                 {key: 'sword_guy', frame: 34}, 
                 {key: 'sword_guy', frame: 35}],
-            // repeat: 1,
+                // repeat: 1,
+                frameRate: 12
+        },
+        {
+            key: 'light',
+            frames: game.anims.generateFrameNumbers('sword_guy', { start: 20, end: 23, first: 20 }),
+            // repeat: -1,
             frameRate: 12
         },
         {
@@ -70,8 +70,6 @@ export function createAnimations(game) {
 export function initAnimations(game, animations) {
     //initialize animations to game object
     animations.forEach((a) => {
-        console.log(a)
-
         game.anims.create(a);
     });
 }

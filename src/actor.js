@@ -8,7 +8,7 @@ export function createActor(game, x, y) {
   let new_actor = game.physics.add.group();
   new_actor.x = x;
   new_actor.y = y;
-  new_actor.speed = 4;
+  new_actor.speed = 150;
   new_actor.reach = 2;
   new_actor.facingRight = true;
 
