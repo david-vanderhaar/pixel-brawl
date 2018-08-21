@@ -1,63 +1,54 @@
 export function createAnimations(game) {
     let animations = [
         {
-            key: 'flourish',
+            key: 'longsword_flourish',
             frames: game.anims.generateFrameNumbers('sword_guy', { start: 0, end: 10, first: 0 }),
             frameRate: 20
         },
         {
-            key: 'hit',
+            key: 'longsword_hit',
             frames: game.anims.generateFrameNumbers('sword_guy', { start: 88, end: 91, first: 88 }),
             repeat: -1,
             frameRate: 12
         },
         {
-            key: 'idle',
-            frames: game.anims.generateFrameNumbers('sword_guy', { start: 24, end: 27, first: 24 }),
+            key: 'longsword_idle',
+            frames: game.anims.generateFrameNumbers('longsword_idle'),
             repeat: -1,
             frameRate: 12
         },
         {
-            key: 'run',
-            frames: game.anims.generateFrameNumbers('sword_guy', { start: 28, end: 31, first: 28 }),
+            key: 'longsword_run',
+            frames: game.anims.generateFrameNumbers('longsword_walk'),
             repeat: -1,
             frameRate: 12
         },
         {
-            key: 'jump',
+            key: 'longsword_jump',
             frames: game.anims.generateFrameNumbers('sword_guy', { start: 84, end: 87, first: 84 }),
             repeat: -1,
             frameRate: 12
         },
         {
-            key: 'heavy',
-            // frames: game.anims.generateFrameNumbers('sword_guy', { start: 32, end: 35, first: 32 }),
-            frames: [
-                {key: 'sword_guy', frame: 32}, 
-                {key: 'sword_guy', frame: 32}, 
-                {key: 'sword_guy', frame: 32}, 
-                {key: 'sword_guy', frame: 33}, 
-                {key: 'sword_guy', frame: 33}, 
-                {key: 'sword_guy', frame: 34}, 
-                {key: 'sword_guy', frame: 34}, 
-                {key: 'sword_guy', frame: 35}],
+            key: 'longsword_heavy',
+            frames: game.anims.generateFrameNumbers('longsword_mittlehau'),
                 // repeat: 1,
                 frameRate: 12
         },
         {
-            key: 'light',
-            frames: game.anims.generateFrameNumbers('sword_guy', { start: 20, end: 23, first: 20 }),
+            key: 'longsword_light',
+            frames: game.anims.generateFrameNumbers('longsword_zornhau'),
             // repeat: -1,
             frameRate: 12
         },
         {
-            key: 'light_2',
+            key: 'longsword_light_2',
             frames: game.anims.generateFrameNumbers('sword_guy', { start: 64, end: 67, first: 67 }),
             // repeat: -1,
             frameRate: 12
         },
         {
-            key: 'death',
+            key: 'longsword_death',
             frames: game.anims.generateFrameNumbers('sword_guy', { start: 72, end: 83, first: 72 }),
             repeat: 0,
             frameRate: 12
@@ -65,11 +56,4 @@ export function createAnimations(game) {
 
     ];
     return animations;
-}
-
-export function initAnimations(game, animations) {
-    //initialize animations to game object
-    animations.forEach((a) => {
-        game.anims.create(a);
-    });
 }

@@ -1,5 +1,3 @@
-import * as Animations from './animations';
-
 export function createUI(game, actor, x, y) {
     let ui = {
         constants: {
@@ -25,17 +23,18 @@ export function createUI(game, actor, x, y) {
         },
         body: actor.create(x, y, 'body'),
         directions: {
-            aim_up: actor.create(x, y - 16, 'direction'),
+            aim_up: actor.create(x, y - 54, 'direction'),
             aim_left: actor.create(x - 42, y + 54, 'direction'),
             aim_right: actor.create(x + 42, y + 54, 'direction'),
         },
-        animations: Animations.createAnimations(game),
+        animations: 'default',
         tweens: [],
         init: (actor) => {
-            Animations.initAnimations(game, actor.ui.animations);
-            actor.ui.body.anims.play('idle');
-            actor.ui.body.body.transform.displayOriginX = 16;
-            actor.ui.body.body.transform.displayOriginY = 8;
+            actor.ui.body.anims.play(actor.ui.animations + '_idle');
+            // actor.ui.body.body.transform.displayOriginX = 16;
+            // actor.ui.body.body.transform.displayOriginY = 8;
+            actor.ui.body.setOrigin(.35, .65)
+            // actor.ui.body.flipX = true;
             actor.getChildren().forEach(element => {
                 element.setDisplaySize(128, 128)
             });
@@ -54,11 +53,13 @@ export function createUI(game, actor, x, y) {
                 actor.getChildren().forEach(element => {
                     element.setDisplaySize(128, 128)
                 });
+                // actor.ui.body.flipX = false
             } else {
                 actor.ui.body.body.transform.displayOriginX = -16;
                 actor.getChildren().forEach(element => {
                     element.setDisplaySize(-128, 128)
                 });
+                // actor.ui.body.flipX = true
             }
 
             for (let element in actor.ui.directions) {

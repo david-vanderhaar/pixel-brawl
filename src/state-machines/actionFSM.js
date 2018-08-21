@@ -16,16 +16,16 @@ export class FSM extends StateMachine {
           return;
         },
         onMove:  function() { 
-          this.getActor().actor.ui.body.anims.play('run');
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_run');
         },
         onStand: function() {
-          this.getActor().actor.ui.body.anims.play('idle');
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_idle');
         },
         onLight: function() {
-          this.getActor().actor.ui.body.anims.play('light');
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_light');
         },
         onHeavy: function() {
-          this.getActor().actor.ui.body.anims.play('heavy');
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_heavy');
         },
         getActor: function() { return this.actor },
       }

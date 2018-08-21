@@ -1,4 +1,5 @@
 import { createActor } from './actor';
+import * as Animations from './animations/index';
 
 export class Boot extends Phaser.Scene {
   constructor () {
@@ -21,6 +22,11 @@ export class Load extends Phaser.Scene {
       this.load.image('direction', 'assets/blue.png');
       this.load.spritesheet('squares', 'assets/square2.png', { frameWidth: 32, frameHeight: 32 });
       this.load.spritesheet('sword_guy', 'assets/SwordGuy_SHEET.png', { frameWidth: 64, frameHeight: 64 });
+      this.load.spritesheet('longsword_idle', 'assets/sheets/longsword_idle.png', { frameWidth: 64, frameHeight: 64 });
+      this.load.spritesheet('longsword_walk', 'assets/sheets/longsword_walk.png', { frameWidth: 64, frameHeight: 64 });
+      this.load.spritesheet('longsword_block_1', 'assets/sheets/longsword_block_1.png', { frameWidth: 64, frameHeight: 64 });
+      this.load.spritesheet('longsword_mittlehau', 'assets/sheets/longsword_mittlehau.png', { frameWidth: 64, frameHeight: 64 });
+      this.load.spritesheet('longsword_zornhau', 'assets/sheets/longsword_zornhau.png', { frameWidth: 64, frameHeight: 64 });
 
   }
 
@@ -39,6 +45,9 @@ export class Load extends Phaser.Scene {
     setTimeout(() => {
       this.scene.start('Play')
     }, 100)
+
+    Animations.initAnimations(this);
+
   }
 
 }
@@ -55,7 +64,7 @@ export class Play extends Phaser.Scene {
     this.add.text(80, 50, 'Press a button on the Gamepad to use', { font: '16px Courier', fill: '#00ff00' });
     this.actors = [];
     this.maxPlayers = 2;
-
+    this.actors.push(createActor(this, 200, 200))
     addPad(this);
 
     this.dummy = this.physics.add.sprite(600, 200, 'body')
