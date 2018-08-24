@@ -8,8 +8,8 @@ export function createAnimations(game) {
     {
         key: 'default_hit',
         frames: game.anims.generateFrameNumbers('sword_guy', { start: 88, end: 91, first: 88 }),
-        repeat: -1,
-        frameRate: 12
+        // repeat: -1,
+        frameRate: 30
     },
     {
         key: 'default_idle',

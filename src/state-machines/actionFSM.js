@@ -6,13 +6,15 @@ export class FSM extends StateMachine {
     super({
       init: 'standing',
       transitions: [
-        { name: 'move',  from: ['standing', 'light_attacking', 'heavy_attacking'], to: 'moving'    },
-        { name: 'stand', from: ['moving', 'light_attacking', 'heavy_attacking'],   to: 'standing'  },
+        { name: 'move',  from: ['standing', 'light_attacking', 'heavy_attacking', 'taking_hit'], to: 'moving'    },
+        { name: 'stand', from: ['moving', 'light_attacking', 'heavy_attacking', 'taking_hit'],   to: 'standing'  },
         { name: 'light', from: ['moving', 'standing'],   to: 'light_attacking'  },
         { name: 'heavy', from: ['moving', 'standing'],   to: 'heavy_attacking'  },
+        { name: 'hit', from: ['moving', 'standing'],   to: 'taking_hit'  },
       ],
       methods: {
         onInvalidTransition: function(transition, from, to) {
+          console.log('invalid transition')
           return;
         },
         onMove:  function() { 
@@ -26,6 +28,10 @@ export class FSM extends StateMachine {
         },
         onHeavy: function() {
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_heavy');
+        },
+        onHit: function() {
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_hit');
+          this.getActor().actor.setVelocityX(-this.getActor().actor.speed, 0)
         },
         getActor: function() { return this.actor },
       }
@@ -82,6 +88,12 @@ export function heavy_attacking(actor) {
   actor.setVelocityX(0, 0)
   let activeFrames = [4, 5, 6]
   updateAttackState(actor, activeFrames);
+}
+
+export function taking_hit(actor) {
+  if (!actor.ui.body.anims.isPlaying) {
+    actor.states.actions.stand();
+  }
 }
 
 let updateAttackState = (actor, activeFrames) => {

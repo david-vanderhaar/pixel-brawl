@@ -4,8 +4,9 @@ import * as lockFSM from './state-machines/lockFSM';
 import * as actorInput from './actor/input';
 import * as actorUI from './actor/ui';
 
-export function createActor(game, x, y) {
+export function createActor(game, id, x, y) {
   let new_actor = game.physics.add.group();
+  new_actor.id = id;
   new_actor.x = x;
   new_actor.y = y;
   new_actor.speed = 150;
@@ -50,6 +51,9 @@ export function createActor(game, x, y) {
         actionFSM[currentState](new_actor);
         break;
       case 'heavy_attacking':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'taking_hit':
         actionFSM[currentState](new_actor);
         break;
     }

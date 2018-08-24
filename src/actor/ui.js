@@ -34,7 +34,6 @@ export function createUI(game, actor, x, y) {
             // actor.ui.body.body.transform.displayOriginX = 16;
             // actor.ui.body.body.transform.displayOriginY = 8;
             actor.ui.body.setOrigin(.35, .65)
-            // actor.ui.body.flipX = true;
             actor.getChildren().forEach(element => {
                 element.setDisplaySize(128, 128)
             });
@@ -53,13 +52,11 @@ export function createUI(game, actor, x, y) {
                 actor.getChildren().forEach(element => {
                     element.setDisplaySize(128, 128)
                 });
-                // actor.ui.body.flipX = false
             } else {
                 actor.ui.body.body.transform.displayOriginX = -16;
                 actor.getChildren().forEach(element => {
                     element.setDisplaySize(-128, 128)
                 });
-                // actor.ui.body.flipX = true
             }
 
             for (let element in actor.ui.directions) {
