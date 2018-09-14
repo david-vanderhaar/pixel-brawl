@@ -4,11 +4,12 @@ import * as lockFSM from './state-machines/lockFSM';
 import * as actorInput from './actor/input';
 import * as actorUI from './actor/ui';
 
-export function createActor(game, id, x, y) {
+export function createActor(game, id, x, y, is_dummy = false) {
   let new_actor = game.physics.add.group();
   new_actor.id = id;
   new_actor.x = x;
   new_actor.y = y;
+  new_actor.is_dummy = is_dummy;
   new_actor.speed = 150;
   new_actor.reach = 2;
   new_actor.facingRight = true;
@@ -40,6 +41,7 @@ export function createActor(game, id, x, y) {
     }
 
     let currentState = new_actor.states.actions.state;
+    // console.log(currentState)
     switch (currentState) {
       case 'standing':
         actionFSM[currentState](new_actor);
@@ -57,7 +59,7 @@ export function createActor(game, id, x, y) {
         actionFSM[currentState](new_actor);
         break;
     }
-    
+
     if (new_actor.states.lock.is('locked')) {
       switch (new_actor.states.aim.state) {
         case 'up':

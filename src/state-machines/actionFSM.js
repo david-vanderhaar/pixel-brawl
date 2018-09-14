@@ -10,17 +10,19 @@ export class FSM extends StateMachine {
         { name: 'stand', from: ['moving', 'light_attacking', 'heavy_attacking', 'taking_hit'],   to: 'standing'  },
         { name: 'light', from: ['moving', 'standing'],   to: 'light_attacking'  },
         { name: 'heavy', from: ['moving', 'standing'],   to: 'heavy_attacking'  },
-        { name: 'hit', from: ['moving', 'standing'],   to: 'taking_hit'  },
+        { name: 'hit', from: ['moving', 'standing', 'taking_hit', 'light_attacking', 'heavy_attacking',],   to: 'taking_hit'  },
       ],
       methods: {
         onInvalidTransition: function(transition, from, to) {
           console.log('invalid transition')
           return;
         },
-        onMove:  function() { 
+        onMove:  function() {
+          this.getActor().actor.ui.hit_box.destroy(this.getActor().actor);
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_run');
         },
         onStand: function() {
+          this.getActor().actor.ui.hit_box.destroy(this.getActor().actor);
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_idle');
         },
         onLight: function() {
@@ -30,8 +32,9 @@ export class FSM extends StateMachine {
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_heavy');
         },
         onHit: function() {
+          this.getActor().actor.ui.hit_box.destroy(this.getActor().actor);
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_hit');
-          this.getActor().actor.setVelocityX(-this.getActor().actor.speed, 0)
+          this.getActor().actor.setVelocityX(-this.getActor().actor.speed, 0);
         },
         getActor: function() { return this.actor },
       }
@@ -42,6 +45,7 @@ export class FSM extends StateMachine {
 }
 
 export function moving(actor) {
+  if (actor.is_dummy) { actor.states.actions.stand(); return }
 
   if (actor.input.keyboard.light.isDown || actor.input.controller.light > 0) {
     actor.states.actions.light();
@@ -60,19 +64,19 @@ export function moving(actor) {
 
 export function standing(actor) {
   actor.setVelocityX(0, 0)
-  
+
   if (actor.input.keyboard.light.isDown || actor.input.controller.light > 0) {
     actor.states.actions.light();
   }
-  
+
   if (actor.input.keyboard.heavy.isDown || actor.input.controller.heavy > 0) {
     actor.states.actions.heavy();
   }
-  
+
   if (actor.input.keyboard.left.isDown || actor.input.controller.left < 0) {
     actor.states.actions.move();
   }
-  
+
   if (actor.input.keyboard.right.isDown || actor.input.controller.right > 0) {
     actor.states.actions.move();
   }
@@ -106,10 +110,11 @@ let updateAttackState = (actor, activeFrames) => {
   }
 
   if (currentFrame >= activeFrames[activeFrames.length - 1]) {
-    if (actor.ui.hit_box.box !== null) {
-      actor.ui.hit_box.box.destroy();
-      actor.ui.hit_box.box = null;
-    }
+    // if (actor.ui.hit_box.box !== null) {
+    //   actor.ui.hit_box.update(actor, true);
+    //   // actor.ui.hit_box.box.destroy();
+    //   // actor.ui.hit_box.box = null;
+    // }
   }
 
   if (!actor.ui.body.anims.isPlaying) {

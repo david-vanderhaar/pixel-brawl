@@ -62,23 +62,22 @@ export class Play extends Phaser.Scene {
   create() {
     this.add.text(80, 20, 'Play')
     this.add.text(80, 50, 'Press a button on the Gamepad to use', { font: '16px Courier', fill: '#00ff00' });
-    this.actors = [];
-    this.maxPlayers = 2;
-    this.actors.push(createActor(this, this.actors.length, 200, 200))
+    this.pixel_brawl = {}
+    this.pixel_brawl.actors = [];
+    this.pixel_brawl.maxPlayers = 2;
+    this.pixel_brawl.actor_colliders = [];
+    // this.pixel_brawl.dummy = this.physics.add.sprite(600, 200, 'body')
     addPad(this);
 
-    this.dummy = this.physics.add.sprite(600, 200, 'body')
-    // collisions
-    // add checkHit function
-    // should not duplicte overlap events!
-    this.physics.add.overlap(this.dummy, this.actors[0].ui.body, () => {this.actors[0].states.actions.hit()});
-    this.physics.add.overlap(this.dummy, this.actors[0].ui.body, () => {this.actors[0].states.actions.hit()});
-    console.log(this.physics)
-    
+    // remove after testing
+    this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 200, 200))
+    this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
+    // end remove
+
   } //end create
-  
+
   update() {
-    this.actors.forEach((actor) => {
+    this.pixel_brawl.actors.forEach((actor) => {
       actor.update(this)
     })
   }
@@ -88,13 +87,13 @@ let addPad = (game) => {
   game.input.gamepad.once('down', function (pad, button, index) {
     if (!pad.hasOwnProperty('isActive')) {
       pad['isActive'] = true;
-      let actor = createActor(game, this.actors.length, 200, 200);
+      let actor = createActor(game, this.pixel_brawl.actors.length, 200, 200);
       actor.input.pad = pad
-      game.actors.push(actor)
+      game.pixel_brawl.actors.push(actor)
     } else {
       console.log('taken')
     }
-    if (game.actors.length < game.maxPlayers) {
+    if (game.pixel_brawl.actors.length < game.pixel_brawl.maxPlayers) {
       addPad(game);
     }
   }, game);

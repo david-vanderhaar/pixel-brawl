@@ -13,12 +13,27 @@ export function createUI(game, actor, x, y) {
                 actor.ui.hit_box.box.scaleX = actor.reach;
 
                 // add checkHit function
-                game.physics.add.overlap(game.dummy, actor.ui.hit_box.box, () => {console.log('over')});
-
+                game.pixel_brawl.actor_colliders.forEach((collider) => {
+                  game.physics.world.removeCollider(collider);
+                });
+                // game.pixel_brawl.actor_colliders = [];
+                game.pixel_brawl.actor_colliders = game.pixel_brawl.actors.map((other_actor) => {
+                  if (other_actor.id != actor.id) {
+                    return game.physics.add.overlap(other_actor, actor.ui.hit_box.box, () => {other_actor.states.actions.hit()});
+                  }
+                });
             },
             update: (actor) => {
+              actor.ui.hit_box.box.x = actor.ui.body.body.x + (64 * actor.facingRight);
+              actor.ui.hit_box.box.y = actor.ui.body.body.y + 32;
+            },
+            destroy: (actor) => {
+              if (actor.ui.hit_box.box !== null) {
                 actor.ui.hit_box.box.x = actor.ui.body.body.x + (64 * actor.facingRight);
                 actor.ui.hit_box.box.y = actor.ui.body.body.y + 32;
+                actor.ui.hit_box.box.destroy();
+                actor.ui.hit_box.box = null;
+              }
             },
         },
         body: actor.create(x, y, 'body'),
@@ -41,7 +56,7 @@ export function createUI(game, actor, x, y) {
                 actor.ui.directions[element].setScale(actor.ui.constants.scale);
                 actor.ui.directions[element].alpha = 0;
             };
-            
+
         },
         update: (actor) => {
 
@@ -78,7 +93,7 @@ export function createUI(game, actor, x, y) {
                 delay: 0
               })
             );
-          
+
             dirs.filter((d) => d != dir).forEach((d) => {
               actor.ui.tweens.push(
                 game.tweens.add({
