@@ -11,6 +11,7 @@ export function createActor(game, id, x, y, is_dummy = false) {
   new_actor.y = y;
   new_actor.is_dummy = is_dummy;
   new_actor.speed = 150;
+  new_actor.dodge_multiplier = 2;
   new_actor.reach = 2;
   new_actor.facingRight = true;
 
@@ -50,12 +51,20 @@ export function createActor(game, id, x, y, is_dummy = false) {
         actionFSM[currentState](new_actor);
         break;
       case 'light_attacking':
+        if (new_actor.is_dummy) { new_actor.states.actions.stand(); }
         actionFSM[currentState](new_actor);
         break;
       case 'heavy_attacking':
+        if (new_actor.is_dummy) { new_actor.states.actions.stand(); }
         actionFSM[currentState](new_actor);
         break;
       case 'taking_hit':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'blocking':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'dodging':
         actionFSM[currentState](new_actor);
         break;
     }

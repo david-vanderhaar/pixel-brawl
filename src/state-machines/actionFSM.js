@@ -6,15 +6,18 @@ export class FSM extends StateMachine {
     super({
       init: 'standing',
       transitions: [
-        { name: 'move',  from: ['standing', 'light_attacking', 'heavy_attacking', 'taking_hit'], to: 'moving'    },
-        { name: 'stand', from: ['moving', 'light_attacking', 'heavy_attacking', 'taking_hit'],   to: 'standing'  },
+        { name: 'move',  from: ['standing', 'light_attacking', 'heavy_attacking', 'taking_hit', 'blocking', 'dodging'], to: 'moving'    },
+        { name: 'stand', from: ['moving', 'light_attacking', 'heavy_attacking', 'taking_hit', 'blocking', 'dodging'],   to: 'standing'  },
         { name: 'light', from: ['moving', 'standing'],   to: 'light_attacking'  },
         { name: 'heavy', from: ['moving', 'standing'],   to: 'heavy_attacking'  },
-        { name: 'hit', from: ['moving', 'standing', 'taking_hit', 'light_attacking', 'heavy_attacking',],   to: 'taking_hit'  },
+        { name: 'hit', from: ['moving', 'standing', 'taking_hit', 'light_attacking', 'heavy_attacking', 'dodging'],   to: 'taking_hit'  },
+        { name: 'block', from: ['moving', 'standing',], to: 'blocking'  },
+        { name: 'dodge', from: ['moving', 'standing',], to: 'dodging'  },
       ],
       methods: {
         onInvalidTransition: function(transition, from, to) {
-          console.log('invalid transition')
+          console.log('invalid transition ', transition)
+          console.log(from, to)
           return;
         },
         onMove:  function() {
@@ -34,7 +37,15 @@ export class FSM extends StateMachine {
         onHit: function() {
           this.getActor().actor.ui.hit_box.destroy(this.getActor().actor);
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_hit');
-          this.getActor().actor.setVelocityX(-this.getActor().actor.speed, 0);
+          // this.getActor().actor.setVelocityX(-this.getActor().actor.speed, 0);
+        },
+        onBlock: function() {
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_block');
+        },
+        onDodge: function() {
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_dodge');
+          let speed = this.getActor().actor.ui.body.body.velocity.x * this.getActor().actor.dodge_multiplier;
+          this.getActor().actor.setVelocityX(speed, 0);
         },
         getActor: function() { return this.actor },
       }
@@ -47,7 +58,14 @@ export class FSM extends StateMachine {
 export function moving(actor) {
   if (actor.is_dummy) { actor.states.actions.stand(); return }
 
-  if (actor.input.keyboard.light.isDown || actor.input.controller.light > 0) {
+  let should_dodge =
+    (actor.input.keyboard.dodge.isDown || actor.input.controller.dodge > 0)
+    && actor.states.lock.is('locked')
+    && actor.ui.body.body.velocity.x !== 0;
+
+  if (should_dodge) {
+    actor.states.actions.dodge();
+  } else if (actor.input.keyboard.light.isDown || actor.input.controller.light > 0) {
     actor.states.actions.light();
   } else if (actor.input.keyboard.heavy.isDown || actor.input.controller.heavy > 0) {
     actor.states.actions.heavy();
@@ -64,6 +82,15 @@ export function moving(actor) {
 
 export function standing(actor) {
   actor.setVelocityX(0, 0)
+
+  let should_dodge =
+    (actor.input.keyboard.dodge.isDown || actor.input.controller.dodge > 0)
+    && actor.states.lock.is('locked')
+    && actor.ui.body.body.velocity.x !== 0;
+
+  if (should_dodge) {
+    actor.states.actions.dodge();
+  }
 
   if (actor.input.keyboard.light.isDown || actor.input.controller.light > 0) {
     actor.states.actions.light();
@@ -100,7 +127,20 @@ export function taking_hit(actor) {
   }
 }
 
-let updateAttackState = (actor, activeFrames) => {
+export function blocking(actor) {
+  if (!actor.ui.body.anims.isPlaying) {
+    actor.states.actions.stand();
+  }
+}
+
+export function dodging(actor) {
+  if (!actor.ui.body.anims.isPlaying) {
+    actor.states.actions.stand();
+  }
+}
+
+// Helpers
+let updateAttackState = function(actor, activeFrames) {
   let currentFrame = actor.ui.body.anims.currentFrame.index;
   if (activeFrames.indexOf(currentFrame) !== -1) {
     if (actor.ui.hit_box.box == null) {
@@ -108,15 +148,6 @@ let updateAttackState = (actor, activeFrames) => {
     }
     actor.ui.hit_box.update(actor);
   }
-
-  if (currentFrame >= activeFrames[activeFrames.length - 1]) {
-    // if (actor.ui.hit_box.box !== null) {
-    //   actor.ui.hit_box.update(actor, true);
-    //   // actor.ui.hit_box.box.destroy();
-    //   // actor.ui.hit_box.box = null;
-    // }
-  }
-
   if (!actor.ui.body.anims.isPlaying) {
     actor.states.actions.stand();
   }

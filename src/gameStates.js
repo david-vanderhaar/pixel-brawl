@@ -65,13 +65,12 @@ export class Play extends Phaser.Scene {
     this.pixel_brawl = {}
     this.pixel_brawl.actors = [];
     this.pixel_brawl.maxPlayers = 2;
-    this.pixel_brawl.actor_colliders = [];
     // this.pixel_brawl.dummy = this.physics.add.sprite(600, 200, 'body')
     addPad(this);
 
     // remove after testing
     this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 200, 200))
-    this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
+    // this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
     // end remove
 
   } //end create

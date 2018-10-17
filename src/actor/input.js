@@ -1,4 +1,5 @@
 export function createInput(game) {
+  console.log(Phaser.Input.Keyboard.KeyCodes)
   return {
     keyboard: {
       left: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
@@ -9,6 +10,7 @@ export function createInput(game) {
       lock: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT),
       light: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
       heavy: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R),
+      dodge: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ALT),
     },
     pad: null,
     controller: {
@@ -21,6 +23,7 @@ export function createInput(game) {
       lock: null,
       light: null,
       heavy: null,
+      dodge: null,
     },
     update: (actor) => {
       if (actor.input.pad !== null) {
@@ -34,6 +37,7 @@ export function createInput(game) {
           actor.input.controller.lock = actor.input.pad.axes[2].getValue();
           actor.input.controller.light = actor.input.pad.R1;
           actor.input.controller.heavy = actor.input.pad.axes[5].getValue();
+          actor.input.controller.dodge = actor.input.pad.A;
         } catch(error) {
           // console.error('No gamepad detected');
         }
