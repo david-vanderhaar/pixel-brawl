@@ -30,6 +30,20 @@ export function createAnimations(game) {
         frameRate: 24
     },
     {
+        key: 'default_dodge_recovery',
+        frames: [
+          {key: 'sword_guy', frame: 12},
+          {key: 'sword_guy', frame: 13},
+          {key: 'sword_guy', frame: 14},
+          {key: 'sword_guy', frame: 15},
+          {key: 'sword_guy', frame: 14},
+          {key: 'sword_guy', frame: 13},
+          {key: 'sword_guy', frame: 12},
+        ],
+        // repeat: 2,
+        frameRate: 12
+    },
+    {
         key: 'default_jump',
         frames: game.anims.generateFrameNumbers('sword_guy', { start: 84, end: 87, first: 84 }),
         repeat: -1,

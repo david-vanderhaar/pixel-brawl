@@ -3,3 +3,9 @@ export function shouldBlock(other_actor, actor) {
   && other_actor.facingRight != actor.facingRight
   && other_actor.states.aim.state == actor.states.aim.state;
 }
+
+export function shouldDodge(actor) {
+  return (actor.input.keyboard.dodge.isDown || actor.input.controller.dodge > 0)
+  && actor.states.lock.is('locked')
+  && actor.ui.body.body.velocity.x !== 0;
+}

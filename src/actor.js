@@ -11,7 +11,8 @@ export function createActor(game, id, x, y, is_dummy = false) {
   new_actor.y = y;
   new_actor.is_dummy = is_dummy;
   new_actor.speed = 150;
-  new_actor.dodge_multiplier = 2;
+  new_actor.run_multiplier = 1.4;
+  new_actor.dodge_multiplier = 3;
   new_actor.reach = 2;
   new_actor.facingRight = true;
 
@@ -65,6 +66,9 @@ export function createActor(game, id, x, y, is_dummy = false) {
         actionFSM[currentState](new_actor);
         break;
       case 'dodging':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'dodge_recovering':
         actionFSM[currentState](new_actor);
         break;
     }
