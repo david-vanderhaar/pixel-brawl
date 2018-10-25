@@ -41,7 +41,13 @@ export function createAnimations(game) {
           {key: 'sword_guy', frame: 12},
         ],
         // repeat: 2,
-        frameRate: 12
+        frameRate: 48
+    },
+    {
+        key: 'default_roll',
+        frames: game.anims.generateFrameNumbers('sword_guy', { start: 72, end: 83}),
+        // repeat: -1,
+        frameRate: 24
     },
     {
         key: 'default_jump',
@@ -68,7 +74,14 @@ export function createAnimations(game) {
     {
         key: 'default_light',
         frames: game.anims.generateFrameNumbers('sword_guy', { start: 20, end: 23, first: 20 }),
-        // repeat: -1,
+        frames: [
+          {key: 'sword_guy', frame: 20},
+          {key: 'sword_guy', frame: 21},
+          {key: 'sword_guy', frame: 22},
+          {key: 'sword_guy', frame: 23},
+          {key: 'sword_guy', frame: 23},
+          {key: 'sword_guy', frame: 22},
+        ],
         frameRate: 12
     },
     {

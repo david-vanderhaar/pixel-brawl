@@ -54,8 +54,7 @@ export function createUI(game, actor, x, y) {
         tweens: [],
         init: (actor) => {
           actor.ui.body.anims.play(actor.ui.animations + '_idle');
-          // actor.ui.body.body.transform.displayOriginX = 16;
-          // actor.ui.body.body.transform.displayOriginY = 8;
+          // un comment following set origin for default anims
           actor.ui.body.setOrigin(.35, .65)
           actor.getChildren().forEach(element => {
               element.setDisplaySize(128, 128)

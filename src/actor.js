@@ -15,9 +15,13 @@ export function createActor(game, id, x, y, is_dummy = false) {
   new_actor.dodge_multiplier = 3;
   new_actor.reach = 2;
   new_actor.facingRight = true;
+  new_actor.health = {
+    value: 5,
+    text: game.add.text(450, 50 + (id * 25), `Player ${id} Health: 5`, { font: '16px Courier', fill: '#00ff00' }),
+  }
 
   // controls
-  new_actor.input = actorInput.createInput(game);
+  new_actor.input = actorInput.createInput(game, new_actor);
   // ui
   new_actor.ui = actorUI.createUI(game, new_actor, new_actor.x, new_actor.y);
   new_actor.ui.init(new_actor);
@@ -69,6 +73,9 @@ export function createActor(game, id, x, y, is_dummy = false) {
         actionFSM[currentState](new_actor);
         break;
       case 'dodge_recovering':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'rolling':
         actionFSM[currentState](new_actor);
         break;
     }

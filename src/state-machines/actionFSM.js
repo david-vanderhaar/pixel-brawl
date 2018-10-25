@@ -7,14 +7,15 @@ export class FSM extends StateMachine {
     super({
       init: 'standing',
       transitions: [
-        { name: 'move',  from: ['standing', 'light_attacking', 'heavy_attacking', 'taking_hit', 'blocking', 'dodge_recovering'], to: 'moving'    },
-        { name: 'stand', from: ['moving', 'light_attacking', 'heavy_attacking', 'taking_hit', 'blocking', 'dodge_recovering'],   to: 'standing'  },
+        { name: 'move',  from: ['standing', 'light_attacking', 'heavy_attacking', 'taking_hit', 'blocking', 'dodge_recovering', 'rolling'], to: 'moving'    },
+        { name: 'stand', from: ['moving', 'light_attacking', 'heavy_attacking', 'taking_hit', 'blocking', 'dodge_recovering', 'rolling'],   to: 'standing'  },
         { name: 'light', from: ['moving', 'standing'],   to: 'light_attacking'  },
         { name: 'heavy', from: ['moving', 'standing'],   to: 'heavy_attacking'  },
-        { name: 'hit', from: ['moving', 'standing', 'taking_hit', 'light_attacking', 'heavy_attacking', 'dodging', 'dodge_recovering'],   to: 'taking_hit'  },
+        { name: 'hit', from: ['moving', 'standing', 'taking_hit', 'light_attacking', 'heavy_attacking', 'dodging', 'dodge_recovering', 'rolling'],   to: 'taking_hit'  },
         { name: 'block', from: ['moving', 'standing',], to: 'blocking'  },
         { name: 'dodge', from: ['moving', 'standing',], to: 'dodging'  },
         { name: 'dodge_recover', from: ['dodging'], to: 'dodge_recovering'  },
+        { name: 'roll', from: ['dodging'], to: 'rolling'  },
       ],
       methods: {
         onInvalidTransition: function(transition, from, to) {
@@ -38,6 +39,10 @@ export class FSM extends StateMachine {
         },
         onHit: function() {
           this.getActor().actor.ui.hit_box.destroy(this.getActor().actor);
+          // taking damage, should be moved to helper and improved. take into account, other actor script
+          this.getActor().actor.health.value -= 1;
+          this.getActor().actor.health.text.setText(`Player ${this.getActor().actor.id} Health: ${this.getActor().actor.health.value}`);
+          // end
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_hit');
           // this.getActor().actor.setVelocityX(-this.getActor().actor.speed, 0);
         },
@@ -52,6 +57,9 @@ export class FSM extends StateMachine {
         onDodgeRecover: function() {
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_dodge_recovery');
         },
+        onRoll: function() {
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_roll');
+        },
         getActor: function() { return this.actor },
       }
     })
@@ -65,15 +73,15 @@ export function moving(actor) {
 
   if (shouldDodge(actor)) {
     actor.states.actions.dodge();
-  } else if (actor.input.keyboard.light.isDown || actor.input.controller.light > 0) {
+  } else if (actor.input.LIGHT()) {
     actor.states.actions.light();
-  } else if (actor.input.keyboard.heavy.isDown || actor.input.controller.heavy > 0) {
+  } else if (actor.input.HEAVY()) {
     actor.states.actions.heavy();
-  } else if (actor.input.keyboard.left.isDown || actor.input.controller.left < 0) {
+  } else if (actor.input.LEFT()) {
     if (actor.facingRight && actor.states.lock.is('unlocked')) { actor.facingRight = false; actor.ui.flip(actor);}
     let speed = actor.speed * (actor.states.lock.is('unlocked') ? actor.run_multiplier : 1);
     actor.setVelocityX(-speed, 0)
-  } else if (actor.input.keyboard.right.isDown || actor.input.controller.right > 0) {
+  } else if (actor.input.RIGHT()) {
     if (!actor.facingRight && actor.states.lock.is('unlocked')) { actor.facingRight = true; actor.ui.flip(actor);}
     let speed = actor.speed * (actor.states.lock.is('unlocked') ? actor.run_multiplier : 1);
     actor.setVelocityX(speed, 0)
@@ -89,19 +97,19 @@ export function standing(actor) {
     actor.states.actions.dodge();
   }
 
-  if (actor.input.keyboard.light.isDown || actor.input.controller.light > 0) {
+  if (actor.input.LIGHT()) {
     actor.states.actions.light();
   }
 
-  if (actor.input.keyboard.heavy.isDown || actor.input.controller.heavy > 0) {
+  if (actor.input.HEAVY()) {
     actor.states.actions.heavy();
   }
 
-  if (actor.input.keyboard.left.isDown || actor.input.controller.left < 0) {
+  if (actor.input.LEFT()) {
     actor.states.actions.move();
   }
 
-  if (actor.input.keyboard.right.isDown || actor.input.controller.right > 0) {
+  if (actor.input.RIGHT()) {
     actor.states.actions.move();
   }
 }
@@ -131,6 +139,9 @@ export function blocking(actor) {
 }
 
 export function dodging(actor) {
+  if (actor.input.DODGE()) {
+    actor.states.actions.roll();
+  }
   if (!actor.ui.body.anims.isPlaying) {
     actor.states.actions.dodgeRecover();
   }
@@ -138,6 +149,12 @@ export function dodging(actor) {
 
 export function dodge_recovering(actor) {
   actor.setVelocityX(0, 0)
+  if (!actor.ui.body.anims.isPlaying) {
+    actor.states.actions.stand();
+  }
+}
+
+export function rolling(actor) {
   if (!actor.ui.body.anims.isPlaying) {
     actor.states.actions.stand();
   }

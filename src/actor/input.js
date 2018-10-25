@@ -1,6 +1,36 @@
-export function createInput(game) {
+export function createInput(game, actor) {
   console.log(Phaser.Input.Keyboard.KeyCodes)
   return {
+    LEFT: () => {
+      return actor.input.keyboard.left.isDown || actor.input.controller.left < 0
+    },
+    RIGHT: () => {
+      return actor.input.keyboard.right.isDown || actor.input.controller.right > 0
+    },
+    AIM_UP: () => {
+      return Phaser.Input.Keyboard.JustDown(actor.input.keyboard.aim_up) || actor.input.controller.aim_up < -0.4
+    },
+    AIM_LEFT: () => {
+      return Phaser.Input.Keyboard.JustDown(actor.input.keyboard.aim_left) || actor.input.controller.aim_left < 0
+    },
+    AIM_RIGHT: () => {
+      return Phaser.Input.Keyboard.JustDown(actor.input.keyboard.aim_right) || actor.input.controller.aim_right > 0
+    },
+    LOCK: () => {
+      return Phaser.Input.Keyboard.JustDown(actor.input.keyboard.lock) || actor.input.controller.lock > 0
+    },
+    UNLOCK: () => {
+      return Phaser.Input.Keyboard.JustUp(actor.input.keyboard.lock) && actor.input.controller.lock <= 0
+    },
+    LIGHT: () => {
+      return Phaser.Input.Keyboard.JustDown(actor.input.keyboard.light) || actor.input.controller.light > 0
+    },
+    HEAVY: () => {
+      return Phaser.Input.Keyboard.JustDown(actor.input.keyboard.heavy) || actor.input.controller.heavy > 0
+    },
+    DODGE: () => {
+      return Phaser.Input.Keyboard.JustDown(actor.input.keyboard.dodge) || actor.input.controller.dodge > 0
+    },
     keyboard: {
       left: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
       right: game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),

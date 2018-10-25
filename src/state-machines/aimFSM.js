@@ -19,10 +19,10 @@ export class FSM extends StateMachine {
 }
 
 export function aimingUp(game, dir, actor) {
-  if (actor.input.keyboard.aim_left.isDown || actor.input.controller.aim_left < 0) {
+  if (actor.input.AIM_LEFT()) {
     actor.ui.aimUISwitch(game, 'left', actor);
     actor.states.aim.aimLeft();
-  } else if (actor.input.keyboard.aim_right.isDown || actor.input.controller.aim_right > 0) {
+  } else if (actor.input.AIM_RIGHT()) {
     actor.ui.aimUISwitch(game, 'right', actor);
     actor.states.aim.aimRight();
   }
@@ -32,10 +32,10 @@ export function aimingUp(game, dir, actor) {
   }
 }
 export function aimingLeft(game, dir, actor) {
-  if (actor.input.keyboard.aim_up.isDown || actor.input.controller.aim_up < -0.4) {
+  if (actor.input.AIM_UP()) {
     actor.ui.aimUISwitch(game, 'up', actor);
     actor.states.aim.aimUp();
-  } else if (actor.input.keyboard.aim_right.isDown || actor.input.controller.aim_right > 0) {
+  } else if (actor.input.AIM_RIGHT()) {
     actor.ui.aimUISwitch(game, 'right', actor);
     actor.states.aim.aimRight();
   }
@@ -44,10 +44,10 @@ export function aimingLeft(game, dir, actor) {
   }
 }
 export function aimingRight(game, dir, actor) {
-  if (actor.input.keyboard.aim_up.isDown || actor.input.controller.aim_up < -0.4) {
+  if (actor.input.AIM_UP()) {
     actor.ui.aimUISwitch(game, 'up', actor);
     actor.states.aim.aimUp();
-  } else if (actor.input.keyboard.aim_left.isDown || actor.input.controller.aim_left < 0) {
+  } else if (actor.input.AIM_LEFT()) {
     actor.ui.aimUISwitch(game, 'left', actor);
     actor.states.aim.aimLeft();
   }

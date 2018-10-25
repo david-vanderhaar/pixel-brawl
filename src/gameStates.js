@@ -22,11 +22,13 @@ export class Load extends Phaser.Scene {
       this.load.image('direction', 'assets/blue.png');
       this.load.spritesheet('squares', 'assets/square2.png', { frameWidth: 32, frameHeight: 32 });
       this.load.spritesheet('sword_guy', 'assets/SwordGuy_SHEET.png', { frameWidth: 64, frameHeight: 64 });
-      this.load.spritesheet('longsword_idle', 'assets/sheets/longsword_idle.png', { frameWidth: 64, frameHeight: 64 });
-      this.load.spritesheet('longsword_walk', 'assets/sheets/longsword_walk.png', { frameWidth: 64, frameHeight: 64 });
-      this.load.spritesheet('longsword_block_1', 'assets/sheets/longsword_block_1.png', { frameWidth: 64, frameHeight: 64 });
-      this.load.spritesheet('longsword_mittlehau', 'assets/sheets/longsword_mittlehau.png', { frameWidth: 64, frameHeight: 64 });
-      this.load.spritesheet('longsword_zornhau', 'assets/sheets/longsword_zornhau.png', { frameWidth: 64, frameHeight: 64 });
+      // this.load.spritesheet('adventurer', 'assets/adventurer-v1.5-Sheet.png', { frameWidth: 50, frameHeight: 37 });
+      // this.load.spritesheet('adventurer_2', 'assets/adventurer-hand-combat-Sheet.png', { frameWidth: 50, frameHeight: 37 });
+      // this.load.spritesheet('longsword_idle', 'assets/sheets/longsword_idle.png', { frameWidth: 64, frameHeight: 64 });
+      // this.load.spritesheet('longsword_walk', 'assets/sheets/longsword_walk.png', { frameWidth: 64, frameHeight: 64 });
+      // this.load.spritesheet('longsword_block_1', 'assets/sheets/longsword_block_1.png', { frameWidth: 64, frameHeight: 64 });
+      // this.load.spritesheet('longsword_mittlehau', 'assets/sheets/longsword_mittlehau.png', { frameWidth: 64, frameHeight: 64 });
+      // this.load.spritesheet('longsword_zornhau', 'assets/sheets/longsword_zornhau.png', { frameWidth: 64, frameHeight: 64 });
 
   }
 
@@ -70,7 +72,7 @@ export class Play extends Phaser.Scene {
 
     // remove after testing
     this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 200, 200))
-    // this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
+    this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
     // end remove
 
   } //end create

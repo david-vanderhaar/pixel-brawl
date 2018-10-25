@@ -21,7 +21,7 @@ export class FSM extends StateMachine {
 }
 
 export function locked(actor) {
-  if (!actor.input.keyboard.lock.isDown && actor.input.controller.lock <= 0) {
+  if (actor.input.UNLOCK()) {
     actor.states.lock.unlock(actor);
     actor.ui.tweens.forEach((tween) => {
       tween.stop();
@@ -35,7 +35,7 @@ export function locked(actor) {
 }
 
 export function unlocked(actor) {
-  if (actor.input.keyboard.lock.isDown || actor.input.controller.lock > 0) {
+  if (actor.input.LOCK()) {
     actor.states.lock.lock(actor);
     for (let element in actor.ui.directions) {
       actor.ui.directions[element].setScale(actor.ui.constants.scaleDefault);

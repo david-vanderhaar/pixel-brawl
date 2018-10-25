@@ -5,7 +5,7 @@ export function shouldBlock(other_actor, actor) {
 }
 
 export function shouldDodge(actor) {
-  return (actor.input.keyboard.dodge.isDown || actor.input.controller.dodge > 0)
+  return (actor.input.DODGE())
   && actor.states.lock.is('locked')
   && actor.ui.body.body.velocity.x !== 0;
 }
