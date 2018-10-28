@@ -1,4 +1,4 @@
-import { shouldBlock } from './helper';
+import { shouldBlock, takeDamage } from './helper';
 
 export function createUI(game, actor, x, y) {
     let ui = {
@@ -24,7 +24,12 @@ export function createUI(game, actor, x, y) {
                 if (other_actor.id != actor.id) {
                   let collider = game.physics.add.overlap(other_actor, actor.ui.hit_box.box, () => {
                     // check if the actor being attacked should move to block or hit state
-                    shouldBlock(other_actor, actor) ? other_actor.states.actions.block() : other_actor.states.actions.hit();
+                    if (shouldBlock(other_actor, actor)) {
+                      other_actor.states.actions.block()
+                    } else {
+                      takeDamage(other_actor, actor.attack_strength[actor.states.actions.state])
+                      other_actor.states.actions.hit();
+                    }
                     game.physics.world.removeCollider(collider);
                   });
                   return collider

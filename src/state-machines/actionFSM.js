@@ -16,6 +16,7 @@ export class FSM extends StateMachine {
         { name: 'dodge', from: ['moving', 'standing',], to: 'dodging'  },
         { name: 'dodge_recover', from: ['dodging'], to: 'dodge_recovering'  },
         { name: 'roll', from: ['dodging'], to: 'rolling'  },
+        { name: 'die', from: ['*'], to: 'dead'  },
       ],
       methods: {
         onInvalidTransition: function(transition, from, to) {
@@ -39,10 +40,7 @@ export class FSM extends StateMachine {
         },
         onHit: function() {
           this.getActor().actor.ui.hit_box.destroy(this.getActor().actor);
-          // taking damage, should be moved to helper and improved. take into account, other actor script
-          this.getActor().actor.health.value -= 1;
-          this.getActor().actor.health.text.setText(`Player ${this.getActor().actor.id} Health: ${this.getActor().actor.health.value}`);
-          // end
+
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_hit');
           // this.getActor().actor.setVelocityX(-this.getActor().actor.speed, 0);
         },
@@ -60,11 +58,20 @@ export class FSM extends StateMachine {
         onRoll: function() {
           this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_roll');
         },
+        onDie: function() {
+          this.getActor().actor.ui.body.anims.play(this.getActor().actor.ui.animations + '_death');
+        },
         getActor: function() { return this.actor },
       }
     })
     this.actor = actor;
 
+  }
+}
+
+export function global(actor) {
+  if (actor.health.value <= 0 && !actor.states.actions.is('dead')) {
+    actor.states.actions.die();
   }
 }
 
@@ -158,6 +165,10 @@ export function rolling(actor) {
   if (!actor.ui.body.anims.isPlaying) {
     actor.states.actions.stand();
   }
+}
+
+export function dead(actor) {
+  return;
 }
 
 // Helpers

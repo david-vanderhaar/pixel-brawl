@@ -18,7 +18,11 @@ export function createActor(game, id, x, y, is_dummy = false) {
   new_actor.health = {
     value: 5,
     text: game.add.text(450, 50 + (id * 25), `Player ${id} Health: 5`, { font: '16px Courier', fill: '#00ff00' }),
-  }
+  };
+  new_actor.attack_strength = {
+    light_attacking: 1,
+    heavy_attacking: 2,
+  };
 
   // controls
   new_actor.input = actorInput.createInput(game, new_actor);
@@ -78,7 +82,12 @@ export function createActor(game, id, x, y, is_dummy = false) {
       case 'rolling':
         actionFSM[currentState](new_actor);
         break;
+      case 'dead':
+        actionFSM[currentState](new_actor);
+        break;
     }
+
+    actionFSM.global(new_actor);
 
     if (new_actor.states.lock.is('locked')) {
       switch (new_actor.states.aim.state) {

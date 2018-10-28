@@ -71,8 +71,8 @@ export class Play extends Phaser.Scene {
     addPad(this);
 
     // remove after testing
-    this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 200, 200))
-    this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
+    // this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 200, 200))
+    // this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
     // end remove
 
   } //end create

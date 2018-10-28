@@ -9,3 +9,8 @@ export function shouldDodge(actor) {
   && actor.states.lock.is('locked')
   && actor.ui.body.body.velocity.x !== 0;
 }
+
+export function takeDamage(actor, damage) {
+  actor.health.value -= damage;
+  actor.health.text.setText(`Player ${actor.id} Health: ${actor.health.value}`);
+}
