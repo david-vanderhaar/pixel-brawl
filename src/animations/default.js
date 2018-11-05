@@ -45,9 +45,9 @@ export function createAnimations(game) {
     },
     {
         key: 'default_roll',
-        frames: game.anims.generateFrameNumbers('sword_guy', { start: 72, end: 83}),
+        frames: game.anims.generateFrameNumbers('sword_guy', { start: 96, end: 103}),
         // repeat: -1,
-        frameRate: 24
+        frameRate: 12
     },
     {
         key: 'default_jump',

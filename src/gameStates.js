@@ -21,7 +21,7 @@ export class Load extends Phaser.Scene {
       this.load.image('body', 'assets/red.png');
       this.load.image('direction', 'assets/blue.png');
       this.load.spritesheet('squares', 'assets/square2.png', { frameWidth: 32, frameHeight: 32 });
-      this.load.spritesheet('sword_guy', 'assets/SwordGuy_SHEET.png', { frameWidth: 64, frameHeight: 64 });
+      this.load.spritesheet('sword_guy', 'assets/SwordGuy_SHEET_with_roll.png', { frameWidth: 64, frameHeight: 64 });
       // this.load.spritesheet('adventurer', 'assets/adventurer-v1.5-Sheet.png', { frameWidth: 50, frameHeight: 37 });
       // this.load.spritesheet('adventurer_2', 'assets/adventurer-hand-combat-Sheet.png', { frameWidth: 50, frameHeight: 37 });
       // this.load.spritesheet('longsword_idle', 'assets/sheets/longsword_idle.png', { frameWidth: 64, frameHeight: 64 });
@@ -71,7 +71,7 @@ export class Play extends Phaser.Scene {
     addPad(this);
 
     // remove after testing
-    // this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 200, 200))
+    this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 200, 200))
     // this.pixel_brawl.actors.push(createActor(this, this.pixel_brawl.actors.length, 400, 200, true))
     // end remove
 

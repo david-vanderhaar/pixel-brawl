@@ -162,6 +162,14 @@ export function dodge_recovering(actor) {
 }
 
 export function rolling(actor) {
+  if (actor.facingRight && actor.ui.body.body.velocity.x < 0) {
+    actor.facingRight = false;
+    actor.ui.flip(actor);
+  } else if (!actor.facingRight && actor.ui.body.body.velocity.x > 0) {
+    actor.facingRight = true;
+    actor.ui.flip(actor);
+  }
+
   if (!actor.ui.body.anims.isPlaying) {
     actor.states.actions.stand();
   }
