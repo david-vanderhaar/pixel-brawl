@@ -91,15 +91,23 @@ export function createAnimations(game) {
         frameRate: 12
     },
     {
+      key: 'default_parried',
+      frames: game.anims.generateFrameNumbers('sword_guy', { start: 88, end: 91, first: 88 }),
+      frameRate: 10
+    },
+    {
+      key: 'default_parry',
+      frames: game.anims.generateFrameNumbers('sword_guy', { start: 39, end: 40, first: 39 }),
+      frameRate: 12
+    },
+    {
         key: 'default_hit',
         frames: game.anims.generateFrameNumbers('sword_guy', { start: 88, end: 91, first: 88 }),
-        // repeat: -1,
         frameRate: 12
     },
     {
         key: 'default_death',
         frames: game.anims.generateFrameNumbers('sword_guy', { start: 72, end: 83, first: 72 }),
-        repeat: 0,
         frameRate: 12
     },
 

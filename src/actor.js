@@ -70,6 +70,15 @@ export function createActor(game, id, x, y, is_dummy = false) {
       case 'taking_hit':
         actionFSM[currentState](new_actor);
         break;
+      case 'taking_parry':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'taking_parry_stance':
+        actionFSM[currentState](new_actor);
+        break;
+      case 'parrying':
+        actionFSM[currentState](new_actor);
+        break;
       case 'blocking':
         actionFSM[currentState](new_actor);
         break;

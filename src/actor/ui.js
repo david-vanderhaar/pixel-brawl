@@ -12,6 +12,7 @@ export function createUI(game, actor, x, y) {
             box: null,
             create: (actor) => {
               actor.ui.hit_box.box = game.physics.add.sprite('body');
+              actor.ui.hit_box.box.debugBodyColor = 20152229;
               actor.ui.hit_box.box.scaleX = actor.reach;
 
               // add checkHit function
@@ -46,6 +47,43 @@ export function createUI(game, actor, x, y) {
                 actor.ui.hit_box.box.y = actor.ui.body.body.y + 32;
                 actor.ui.hit_box.box.destroy();
                 actor.ui.hit_box.box = null;
+              }
+            },
+        },
+        parry_box: {
+            box: null,
+            create: (actor) => {
+              actor.ui.parry_box.box = game.physics.add.sprite('body');
+              actor.ui.parry_box.box.debugBodyColor = 1623950;
+              actor.ui.parry_box.box.scaleX = actor.reach;
+
+              // add checkHit function
+              actor.ui.parry_box['actor_colliders'] = [];
+              actor.ui.parry_box.actor_colliders.forEach((collider) => {
+                game.physics.world.removeCollider(collider);
+              });
+
+              actor.ui.parry_box.actor_colliders = game.pixel_brawl.actors.map((other_actor) => {
+                if (other_actor.id != actor.id) {
+                  let collider = game.physics.add.overlap(other_actor, actor.ui.parry_box.box, () => {
+                    other_actor.states.actions.parry_target = actor;
+                    other_actor.states.actions.takeParryStance();
+                    game.physics.world.removeCollider(collider);
+                  });
+                  return collider
+                }
+              });
+            },
+            update: (actor) => {
+              actor.ui.parry_box.box.x = actor.ui.body.body.x + (64 * actor.facingRight);
+              actor.ui.parry_box.box.y = actor.ui.body.body.y + 32;
+            },
+            destroy: (actor) => {
+              if (actor.ui.parry_box.box !== null) {
+                actor.ui.parry_box.box.x = actor.ui.body.body.x + (64 * actor.facingRight);
+                actor.ui.parry_box.box.y = actor.ui.body.body.y + 32;
+                actor.ui.parry_box.box.destroy();
+                actor.ui.parry_box.box = null;
               }
             },
         },
